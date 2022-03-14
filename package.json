@@ -1,0 +1,35 @@
+{
+  "name": "battleship-js-odin",
+  "version": "1.0.0",
+  "description": "## Summary: This project is an implementation of the game battleship. Players will take turns attempting to sink each others ships/boats on the gameboard. The game is over once one player has no more ships/boats. The player with the remaining ships/boats is the winner.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "webpack --mode=production",
+    "watch": "webpack --progress --mode=development -- watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmkirshon/battleship-js-odin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmkirshon/battleship-js-odin/issues"
+  },
+  "homepage": "https://github.com/dmkirshon/battleship-js-odin#readme",
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.11",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.11.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "jest": "^27.5.1",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
+  }
+}
