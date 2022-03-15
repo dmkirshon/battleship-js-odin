@@ -1,7 +1,8 @@
+import { debug } from "webpack";
 import ship from "./ship";
 
 const gameboard = () => {
-  const boardArray = {
+  const board = {
     A: Array(10),
     B: Array(10),
     C: Array(10),
@@ -14,12 +15,14 @@ const gameboard = () => {
     J: Array(10),
   };
 
+  const getGameboard = () => Object.assign(board);
+
   const shipTypes = {
-    carrier: { size: 5, shipInstance: ship(5) },
-    battleship: { size: 4 },
-    cruiser: { size: 3 },
-    submarine: { size: 3 },
-    destroyer: { size: 2 },
+    carrier: { size: 5, shipInstance: ship(5), shipCoordinates: [] },
+    battleship: { size: 4, shipInstance: ship(4), shipCoordinates: [] },
+    cruiser: { size: 3, shipInstance: ship(3), shipCoordinates: [] },
+    submarine: { size: 3, shipInstance: ship(3), shipCoordinates: [] },
+    destroyer: { size: 2, shipInstance: ship(2), shipCoordinates: [] },
   };
 
   const placeShip = (shipType, row, col, axis) => {
@@ -27,32 +30,37 @@ const gameboard = () => {
 
     if (isValidSpot(shipSize, row, col, axis)) {
       if (axis === "horizontal") {
-        placeHorizontal(shipSize, row, col);
+        placeHorizontal(shipType, row, col);
       } else {
-        placeVertical(shipSize, row, col);
+        placeVertical(shipType, row, col);
       }
     }
   };
 
-  const placeHorizontal = (shipSize, row, col) => {
+  const placeHorizontal = (shipType, row, col) => {
+    const shipSize = shipTypes[shipType]["size"];
+
     for (let i = col; i < col + shipSize; i++) {
-      boardArray[row][i] = "S";
+      board[row][i] = "S";
+      shipTypes[shipType]["shipCoordinates"].push({ row: row, col: i });
     }
   };
 
-  const placeVertical = (shipSize, row, col) => {
+  const placeVertical = (shipType, row, col) => {
+    const shipSize = shipTypes[shipType]["size"];
     const rowCharCode = row.charCodeAt();
 
     for (let i = rowCharCode; i < rowCharCode + shipSize; i++) {
       const rowChar = String.fromCharCode(i);
-      boardArray[rowChar][col] = "S";
+      board[rowChar][col] = "S";
+      shipTypes[shipType]["shipCoordinates"].push({ row: rowChar, col: col });
     }
   };
 
   const isValidSpot = (shipSize, row, col, axis) => {
     if (axis === "horizontal") {
       for (let i = col; i < col + shipSize; i++) {
-        if (boardArray[row][i]) {
+        if (board[row][i]) {
           return false;
         }
       }
@@ -63,7 +71,7 @@ const gameboard = () => {
 
       for (let i = rowCharCode; i < rowCharCode + shipSize; i++) {
         const rowChar = String.fromCharCode(i);
-        if (boardArray[rowChar][col]) {
+        if (board[rowChar][col]) {
           return false;
         }
       }
@@ -72,18 +80,47 @@ const gameboard = () => {
     }
   };
 
-  const getGameboard = () => Object.assign(boardArray);
-
   const receiveAttack = (row, col) => {
-    const attackSpot = boardArray[row][col];
+    const attackSpot = board[row][col];
 
     if (attackSpot === "S") {
-      boardArray[row][col] = "X";
+      board[row][col] = "X";
+      hitShip(row, col);
     } else {
-      boardArray[row][col] = "O";
+      board[row][col] = "O";
     }
   };
-  return { getGameboard, placeShip, receiveAttack };
+
+  const hitShip = (row, col) => {
+    let shipHitIndex;
+    const shipHit = Object.values(shipTypes).filter((shipProperties) => {
+      let matchedCoordinates = false;
+      shipProperties.shipCoordinates.forEach(
+        (coordinatePair, coordinateIndex) => {
+          const arrayHitCoordinates = JSON.stringify({ row, col });
+          const arrayCoordinatePair = JSON.stringify(coordinatePair);
+          if (arrayCoordinatePair === arrayHitCoordinates) {
+            matchedCoordinates = true;
+            shipHitIndex = coordinateIndex;
+          }
+        }
+      );
+      return matchedCoordinates;
+    })[0];
+
+    shipHit.shipInstance.hit(shipHitIndex);
+  };
+
+  const areShipsSunk = () => {
+    let shipsSunk = true;
+    Object.values(shipTypes).forEach((shipProperties) => {
+      if (!shipProperties.shipInstance.isSunk()) {
+        shipsSunk = false;
+      }
+    });
+    return shipsSunk;
+  };
+  return { getGameboard, placeShip, receiveAttack, areShipsSunk };
 };
 
 export default gameboard;

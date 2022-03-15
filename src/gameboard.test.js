@@ -85,3 +85,24 @@ describe("Receive Attack", () => {
     expect(testGameboard.getGameboard()["B"][5]).toBe("O");
   });
 });
+
+describe("Are Ships Sunk", () => {
+  beforeEach(() => {
+    testGameboard.placeShip("carrier", "A", 0, "horizontal");
+    testGameboard.placeShip("battleship", "A", 5, "horizontal");
+    testGameboard.placeShip("submarine", "B", 0, "horizontal");
+    testGameboard.placeShip("cruiser", "B", 3, "horizontal");
+    testGameboard.placeShip("destroyer", "A", 9, "vertical");
+
+    //strike all but the last spot of the destroyer
+    for (let i = 0; i < 10; i++) testGameboard.receiveAttack("A", i);
+    for (let i = 0; i < 9; i++) testGameboard.receiveAttack("B", i);
+  });
+  it("returns false if all ships are not sunk", () => {
+    expect(testGameboard.areShipsSunk()).toBeFalsy();
+  });
+  it("returns true if all ships are sunk", () => {
+    testGameboard.receiveAttack("B", 9);
+    expect(testGameboard.areShipsSunk()).toBeTruthy();
+  });
+});
