@@ -1,4 +1,3 @@
-import { debug } from "webpack";
 import ship from "./ship";
 
 const gameboard = () => {
@@ -15,7 +14,7 @@ const gameboard = () => {
     J: Array(10),
   };
 
-  const getGameboard = () => Object.assign(board);
+  const getBoard = () => Object.assign(board);
 
   const shipTypes = {
     carrier: { size: 5, shipInstance: ship(5), shipCoordinates: [] },
@@ -144,7 +143,7 @@ const gameboard = () => {
   };
 
   return {
-    getGameboard,
+    getBoard,
     placeShip,
     receiveAttack,
     areShipsSunk,

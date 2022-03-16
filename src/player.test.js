@@ -23,17 +23,17 @@ describe("Attack Opponent", () => {
     const row = "A";
     const col = 0;
     playerOne.attackOpponent(row, col);
-    expect(computer.getPlayerGameboard().getGameboard()[row][col]).toBe("O");
+    expect(computer.getPlayerGameboard().getBoard()[row][col]).toBe("O");
     computer.attackOpponent(row, col);
-    expect(playerOne.getPlayerGameboard().getGameboard()[row][col]).toBe("O");
+    expect(playerOne.getPlayerGameboard().getBoard()[row][col]).toBe("O");
   });
   it("attacks given a set of coordinates, and hits", () => {
     const row = "B";
     const col = 0;
     playerOne.attackOpponent(row, col);
-    expect(computer.getPlayerGameboard().getGameboard()[row][col]).toBe("X");
+    expect(computer.getPlayerGameboard().getBoard()[row][col]).toBe("X");
     computer.attackOpponent(row, col);
-    expect(playerOne.getPlayerGameboard().getGameboard()[row][col]).toBe("X");
+    expect(playerOne.getPlayerGameboard().getBoard()[row][col]).toBe("X");
   });
 });
 
@@ -53,19 +53,17 @@ describe("Attack By Computer", () => {
   it("attacks player in random location and misses", () => {
     const row = "A";
     const col = 0;
-    expect(playerOne.getPlayerGameboard().getGameboard()[row][col]).toBe(
-      undefined
-    );
+    expect(playerOne.getPlayerGameboard().getBoard()[row][col]).toBe(undefined);
     playerOne.getPlayerGameboard().receiveAttack("B", 0);
     computer.attackByComputer();
-    expect(playerOne.getPlayerGameboard().getGameboard()[row][col]).toBe("O");
+    expect(playerOne.getPlayerGameboard().getBoard()[row][col]).toBe("O");
   });
   it("attacks player in random location and hits", () => {
     const row = "B";
     const col = 0;
-    expect(playerOne.getPlayerGameboard().getGameboard()[row][col]).toBe("S");
+    expect(playerOne.getPlayerGameboard().getBoard()[row][col]).toBe("S");
     playerOne.getPlayerGameboard().receiveAttack("A", 0);
     computer.attackByComputer();
-    expect(playerOne.getPlayerGameboard().getGameboard()[row][col]).toBe("X");
+    expect(playerOne.getPlayerGameboard().getBoard()[row][col]).toBe("X");
   });
 });
