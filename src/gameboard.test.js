@@ -106,3 +106,26 @@ describe("Are Ships Sunk", () => {
     expect(testGameboard.areShipsSunk()).toBeTruthy();
   });
 });
+
+describe("Get Non-Attacked Locations", () => {
+  beforeEach(() => {
+    testGameboard.placeShip("destroyer", "B", 0, "horizontal");
+    const rowLetters = "ABCDEFGHIJ";
+    for (let i = 0; i < 10; i++) {
+      const row = rowLetters[i];
+      for (let j = 0; j < 10; j++) {
+        const col = j;
+        if (!(row === "B" && col === 0) && !(row === "A" && col === 0)) {
+          testGameboard.receiveAttack(row, col);
+        }
+      }
+    }
+  });
+
+  it("returns list of non-attacked locations", () => {
+    expect(testGameboard.getNonAttackedLocations()).toEqual([
+      { row: "A", col: 0 },
+      { row: "B", col: 0 },
+    ]);
+  });
+});

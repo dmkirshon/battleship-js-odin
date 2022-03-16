@@ -120,7 +120,36 @@ const gameboard = () => {
     });
     return shipsSunk;
   };
-  return { getGameboard, placeShip, receiveAttack, areShipsSunk };
+
+  const getNonAttackedLocations = () => {
+    const locations = [];
+    Object.entries(board).forEach((rowArray) => {
+      const rowValue = rowArray[0];
+      const rowSpots = rowArray[1];
+      const colSpots = [];
+
+      for (let i = 0; i < rowSpots.length; i++) {
+        const spot = rowSpots[i];
+        if (spot === undefined || spot === "S") {
+          colSpots.push(i);
+        }
+      }
+
+      colSpots.forEach((spot) => {
+        locations.push({ row: rowValue, col: spot });
+      });
+    });
+
+    return locations;
+  };
+
+  return {
+    getGameboard,
+    placeShip,
+    receiveAttack,
+    areShipsSunk,
+    getNonAttackedLocations,
+  };
 };
 
 export default gameboard;
