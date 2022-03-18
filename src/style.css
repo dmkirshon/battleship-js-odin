@@ -1,0 +1,59 @@
+/* General Style */
+
+html {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+}
+
+/* Gameboard style */
+
+.player-board {
+  width: 275px;
+  height: 275px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.board-cell-first {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board-cell-letter,
+.board-cell-number {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board-cell {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  justify-content: center;
+  align-items: center;
+}

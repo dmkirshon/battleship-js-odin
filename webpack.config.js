@@ -10,7 +10,11 @@ module.exports = {
     clean: true,
   },
   mode: "development",
-  plugins: [new HtmlWebpackPlugin({ title: "Battleship" })],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+    }),
+  ],
   module: {
     rules: [
       {
