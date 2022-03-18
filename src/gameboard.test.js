@@ -124,8 +124,8 @@ describe("Get Non-Attacked Locations", () => {
 
   it("returns list of non-attacked locations", () => {
     expect(testGameboard.getNonAttackedLocations()).toEqual([
-      { row: "A", col: 0 },
-      { row: "B", col: 0 },
+      { row: "A", colSpots: [0] },
+      { row: "B", colSpots: [0] },
     ]);
   });
 });

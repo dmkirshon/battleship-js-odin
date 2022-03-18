@@ -79,3 +79,7 @@ body {
   border-color: grey;
   color: red;
 }
+
+.active-battle-cell:hover {
+  background-color: red;
+}

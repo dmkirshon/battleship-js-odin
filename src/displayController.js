@@ -42,22 +42,90 @@ const displayController = () => {
     const symbolLocations = playerBoard.getShipLocations();
     drawOnBoard(playerBoardDiv, "S", symbolLocations);
   };
-  const drawHits = (player) => {};
-  const drawMisses = (player) => {};
+  const drawHits = (player) => {
+    const playerBoardDiv = whichPlayerDiv(player);
+    const playerBoard = player.getPlayerGameboard();
+    const symbolLocations = playerBoard.getHitLocations();
+    drawOnBoard(playerBoardDiv, "X", symbolLocations);
+  };
+  const drawMisses = (player) => {
+    const playerBoardDiv = whichPlayerDiv(player);
+    const playerBoard = player.getPlayerGameboard();
+    const symbolLocations = playerBoard.getMissLocations();
+    drawOnBoard(playerBoardDiv, "O", symbolLocations);
+  };
 
   const drawOnBoard = (boardDiv, symbol, symbolLocations) => {
     symbolLocations.forEach((location) => {
-      boardDiv.querySelector(
-        `[data-row="${location.row}"][data-col="${location.col}"]`
-      ).textContent = symbol;
+      location.colSpots.forEach((spot) => {
+        const battleCell = boardDiv.querySelector(
+          `[data-row="${location.row}"][data-col="${spot}"]`
+        );
+
+        battleCell.textContent = symbol;
+      });
     });
+  };
+
+  const listenForOpenOpponentBattleCells = (opponent) => {
+    const otherPlayer = opponent.getOpponent();
+    const opponentDiv = whichPlayerDiv(opponent);
+    const openLocations = opponent
+      .getPlayerGameboard()
+      .getNonAttackedLocations();
+
+    openLocations.forEach((rowLocations) => {
+      rowLocations.colSpots.forEach((loc) => {
+        const battleCell = opponentDiv.querySelector(
+          `[data-row="${rowLocations.row}"][data-col="${loc}"]`
+        );
+        battleCell.classList.add("active-battle-cell");
+        battleCell.addEventListener("click", attackCell);
+      });
+    });
+
+    function attackCell() {
+      openLocations.forEach((rowLocations) => {
+        rowLocations.colSpots.forEach((loc) => {
+          const battleCell = opponentDiv.querySelector(
+            `[data-row="${rowLocations.row}"][data-col="${loc}"]`
+          );
+          battleCell.classList.remove("active-battle-cell");
+          battleCell.removeEventListener("click", attackCell);
+        });
+      });
+      const attackRow = this.dataset.row;
+      const attackCol = Number(this.dataset.col);
+      otherPlayer.attackOpponent(attackRow, attackCol);
+      drawHits(opponent);
+      drawMisses(opponent);
+      const gameOverWin = opponent.getPlayerGameboard().areShipsSunk();
+
+      if (opponent.getPlayerGameboard().areShipsSunk()) {
+        return;
+      }
+      opponent.attackByComputer();
+      drawHits(otherPlayer);
+      drawMisses(otherPlayer);
+      const gameOverLose = otherPlayer.getPlayerGameboard().areShipsSunk();
+      if (otherPlayer.getPlayerGameboard().areShipsSunk()) {
+        return;
+      }
+      listenForOpenOpponentBattleCells(opponent);
+    }
   };
 
   const whichPlayerDiv = (player) => {
     return player.isComputer() ? computerBoardDiv : humanBoardDiv;
   };
 
-  return { createPlayerBoard, drawShips };
+  return {
+    createPlayerBoard,
+    drawShips,
+    drawHits,
+    drawMisses,
+    listenForOpenOpponentBattleCells,
+  };
 };
 
 export default displayController;

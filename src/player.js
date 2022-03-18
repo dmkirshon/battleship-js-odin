@@ -5,6 +5,7 @@ const player = (name) => {
   const playerGameboard = gameboard();
 
   const getName = () => name;
+  const getOpponent = () => opponent;
   const getPlayerGameboard = () => playerGameboard;
   const setOpponent = (otherPlayer) => {
     opponent = otherPlayer;
@@ -16,8 +17,9 @@ const player = (name) => {
   };
 
   const attackByComputer = () => {
-    const randRow = createRandomLocation().randRow;
-    const randCol = createRandomLocation().randCol;
+    const randLocation = createRandomLocation();
+    const randRow = randLocation.randRow;
+    const randCol = randLocation.randCol;
 
     opponent.getPlayerGameboard().receiveAttack(randRow, randCol);
   };
@@ -27,12 +29,17 @@ const player = (name) => {
       .getPlayerGameboard()
       .getNonAttackedLocations();
 
-    let rowLetters = [];
+    const rowLetters = [];
+    let colNumbers = [];
 
-    openLocations.forEach((loc) => rowLetters.push(loc.row));
+    openLocations.forEach((rowLocations) => {
+      rowLetters.push(rowLocations.row);
+      colNumbers = rowLocations.colSpots;
+    });
 
     const randRow = rowLetters[Math.floor(Math.random() * rowLetters.length)];
-    const randCol = Math.floor(Math.random() * openLocations.length);
+
+    const randCol = colNumbers[Math.floor(Math.random() * colNumbers.length)];
 
     return { randRow, randCol };
   };
@@ -44,6 +51,7 @@ const player = (name) => {
     attackOpponent,
     attackByComputer,
     isComputer,
+    getOpponent,
   };
 };
 

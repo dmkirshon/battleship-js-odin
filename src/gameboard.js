@@ -113,7 +113,10 @@ const gameboard = () => {
   const areShipsSunk = () => {
     let shipsSunk = true;
     Object.values(shipTypes).forEach((shipProperties) => {
-      if (!shipProperties.shipInstance.isSunk()) {
+      if (
+        shipProperties.shipCoordinates.length !== 0 &&
+        !shipProperties.shipInstance.isSunk()
+      ) {
         shipsSunk = false;
       }
     });
@@ -134,9 +137,9 @@ const gameboard = () => {
         }
       }
 
-      colSpots.forEach((spot) => {
-        locations.push({ row: rowValue, col: spot });
-      });
+      if (colSpots.length !== 0) {
+        locations.push({ row: rowValue, colSpots });
+      }
     });
 
     return locations;
@@ -160,9 +163,9 @@ const gameboard = () => {
         }
       }
 
-      colSpots.forEach((spot) => {
-        locations.push({ row: rowValue, col: spot });
-      });
+      if (colSpots.length !== 0) {
+        locations.push({ row: rowValue, colSpots });
+      }
     });
 
     return locations;
