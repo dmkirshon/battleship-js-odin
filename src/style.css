@@ -20,15 +20,21 @@ body {
 
 .container {
   display: flex;
+  gap: 3rem;
 }
 
 /* Gameboard style */
 
-.player-board {
+.board {
   width: 275px;
   height: 275px;
   display: flex;
   flex-wrap: wrap;
+
+  background-color: rgba(224, 255, 255, 0.412);
+}
+
+.computer-board {
 }
 
 .board-cell-first {
@@ -46,9 +52,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: blue;
 }
 
-.board-cell {
+.battle-cell {
   width: 25px;
   height: 25px;
   display: flex;
@@ -56,4 +63,19 @@ body {
   border-left: 1px solid black;
   justify-content: center;
   align-items: center;
+}
+
+.battle-cell[data-row="J"] {
+  border-bottom: 1px solid black;
+}
+
+.battle-cell[data-col="9"] {
+  border-right: 1px solid black;
+}
+
+.computer-board > *,
+.computer-board > .battle-cell[data-row="J"],
+.computer-board > .battle-cell[data-col="9"] {
+  border-color: grey;
+  color: red;
 }

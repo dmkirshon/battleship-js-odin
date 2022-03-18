@@ -142,12 +142,41 @@ const gameboard = () => {
     return locations;
   };
 
+  const getShipLocations = () => getSymbolLocations("S");
+  const getHitLocations = () => getSymbolLocations("X");
+  const getMissLocations = () => getSymbolLocations("O");
+
+  const getSymbolLocations = (symbol) => {
+    const locations = [];
+    Object.entries(board).forEach((rowArray) => {
+      const rowValue = rowArray[0];
+      const rowSpots = rowArray[1];
+      const colSpots = [];
+
+      for (let i = 0; i < rowSpots.length; i++) {
+        const spot = rowSpots[i];
+        if (spot === symbol) {
+          colSpots.push(i);
+        }
+      }
+
+      colSpots.forEach((spot) => {
+        locations.push({ row: rowValue, col: spot });
+      });
+    });
+
+    return locations;
+  };
+
   return {
     getBoard,
     placeShip,
     receiveAttack,
     areShipsSunk,
     getNonAttackedLocations,
+    getShipLocations,
+    getHitLocations,
+    getMissLocations,
   };
 };
 

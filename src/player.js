@@ -9,6 +9,7 @@ const player = (name) => {
   const setOpponent = (otherPlayer) => {
     opponent = otherPlayer;
   };
+  const isComputer = () => name === "computer";
 
   const attackOpponent = (row, col) => {
     opponent.getPlayerGameboard().receiveAttack(row, col);
@@ -42,6 +43,7 @@ const player = (name) => {
     setOpponent,
     attackOpponent,
     attackByComputer,
+    isComputer,
   };
 };
 
