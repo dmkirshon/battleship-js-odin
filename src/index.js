@@ -1,6 +1,6 @@
 import displayController from "./displayController";
 import player from "./player";
-import style from "./style.css";
+import "./style.css";
 
 const humanPlayer = player("human");
 const computerPlayer = player("computer");
