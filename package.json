@@ -6,7 +6,9 @@
   "scripts": {
     "test": "jest",
     "build": "webpack --mode=production",
-    "watch": "webpack --progress --mode=development --watch"
+    "watch": "webpack --progress --mode=development --watch",
+    "pre-deploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -17,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/dmkirshon/battleship-js-odin/issues"
   },
-  "homepage": "https://github.com/dmkirshon/battleship-js-odin#readme",
+  "homepage": "https://dmkirshon.github.io/battleship-js-odin",
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
     "@types/jest": "^27.4.1",
@@ -28,6 +30,7 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest": "^26.1.1",
     "eslint-plugin-prettier": "^4.0.0",
+    "gh-pages": "^4.0.0",
     "html-webpack-plugin": "^5.5.0",
     "jest": "^27.5.1",
     "style-loader": "^3.3.1",
