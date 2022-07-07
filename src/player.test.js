@@ -40,9 +40,9 @@ describe("Attack Opponent", () => {
 describe("Attack By Computer", () => {
   beforeEach(() => {
     const rowLetters = "ABCDEFGHIJ";
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 10; i += 1) {
       const row = rowLetters[i];
-      for (let j = 0; j < 10; j++) {
+      for (let j = 0; j < 10; j += 1) {
         const col = j;
         if (!(row === "B" && col === 0) && !(row === "A" && col === 0)) {
           playerOne.getPlayerGameboard().receiveAttack(row, col);

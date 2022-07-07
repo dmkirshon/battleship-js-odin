@@ -16,14 +16,6 @@ const player = (name) => {
     opponent.getPlayerGameboard().receiveAttack(row, col);
   };
 
-  const attackByComputer = () => {
-    const randLocation = createRandomLocation();
-    const randRow = randLocation.randRow;
-    const randCol = randLocation.randCol;
-
-    opponent.getPlayerGameboard().receiveAttack(randRow, randCol);
-  };
-
   const createRandomLocation = () => {
     const openLocations = opponent
       .getPlayerGameboard()
@@ -42,6 +34,14 @@ const player = (name) => {
     const randCol = colNumbers[Math.floor(Math.random() * colNumbers.length)];
 
     return { randRow, randCol };
+  };
+
+  const attackByComputer = () => {
+    const randLocation = createRandomLocation();
+    const { randRow } = randLocation;
+    const { randCol } = randLocation;
+
+    opponent.getPlayerGameboard().receiveAttack(randRow, randCol);
   };
 
   return {

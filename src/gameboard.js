@@ -24,8 +24,50 @@ const gameboard = () => {
     destroyer: { size: 2, shipInstance: ship(2), shipCoordinates: [] },
   };
 
+  const placeHorizontal = (shipType, row, col) => {
+    const shipSize = shipTypes[shipType].size;
+
+    for (let i = col; i < col + shipSize; i += 1) {
+      board[row][i] = "S";
+      shipTypes[shipType].shipCoordinates.push({ row, col: i });
+    }
+  };
+
+  const placeVertical = (shipType, row, col) => {
+    const shipSize = shipTypes[shipType].size;
+    const rowCharCode = row.charCodeAt();
+
+    for (let i = rowCharCode; i < rowCharCode + shipSize; i += 1) {
+      const rowChar = String.fromCharCode(i);
+      board[rowChar][col] = "S";
+      shipTypes[shipType].shipCoordinates.push({ row: rowChar, col });
+    }
+  };
+
+  const isValidSpot = (shipSize, row, col, axis) => {
+    if (axis === "horizontal") {
+      for (let i = col; i < col + shipSize; i += 1) {
+        if (board[row][i]) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+    const rowCharCode = row.charCodeAt();
+
+    for (let i = rowCharCode; i < rowCharCode + shipSize; i += 1) {
+      const rowChar = String.fromCharCode(i);
+      if (board[rowChar][col]) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const placeShip = (shipType, row, col, axis) => {
-    const shipSize = shipTypes[shipType]["size"];
+    const shipSize = shipTypes[shipType].size;
 
     if (isValidSpot(shipSize, row, col, axis)) {
       if (axis === "horizontal") {
@@ -33,60 +75,6 @@ const gameboard = () => {
       } else {
         placeVertical(shipType, row, col);
       }
-    }
-  };
-
-  const placeHorizontal = (shipType, row, col) => {
-    const shipSize = shipTypes[shipType]["size"];
-
-    for (let i = col; i < col + shipSize; i++) {
-      board[row][i] = "S";
-      shipTypes[shipType]["shipCoordinates"].push({ row: row, col: i });
-    }
-  };
-
-  const placeVertical = (shipType, row, col) => {
-    const shipSize = shipTypes[shipType]["size"];
-    const rowCharCode = row.charCodeAt();
-
-    for (let i = rowCharCode; i < rowCharCode + shipSize; i++) {
-      const rowChar = String.fromCharCode(i);
-      board[rowChar][col] = "S";
-      shipTypes[shipType]["shipCoordinates"].push({ row: rowChar, col: col });
-    }
-  };
-
-  const isValidSpot = (shipSize, row, col, axis) => {
-    if (axis === "horizontal") {
-      for (let i = col; i < col + shipSize; i++) {
-        if (board[row][i]) {
-          return false;
-        }
-      }
-
-      return true;
-    } else {
-      const rowCharCode = row.charCodeAt();
-
-      for (let i = rowCharCode; i < rowCharCode + shipSize; i++) {
-        const rowChar = String.fromCharCode(i);
-        if (board[rowChar][col]) {
-          return false;
-        }
-      }
-
-      return true;
-    }
-  };
-
-  const receiveAttack = (row, col) => {
-    const attackSpot = board[row][col];
-
-    if (attackSpot === "S") {
-      board[row][col] = "X";
-      hitShip(row, col);
-    } else {
-      board[row][col] = "O";
     }
   };
 
@@ -110,6 +98,17 @@ const gameboard = () => {
     shipHit.shipInstance.hit(shipHitIndex);
   };
 
+  const receiveAttack = (row, col) => {
+    const attackSpot = board[row][col];
+
+    if (attackSpot === "S") {
+      board[row][col] = "X";
+      hitShip(row, col);
+    } else {
+      board[row][col] = "O";
+    }
+  };
+
   const areShipsSunk = () => {
     let shipsSunk = true;
     Object.values(shipTypes).forEach((shipProperties) => {
@@ -130,9 +129,31 @@ const gameboard = () => {
       const rowSpots = rowArray[1];
       const colSpots = [];
 
-      for (let i = 0; i < rowSpots.length; i++) {
+      for (let i = 0; i < rowSpots.length; i += 1) {
         const spot = rowSpots[i];
         if (spot === undefined || spot === "S") {
+          colSpots.push(i);
+        }
+      }
+
+      if (colSpots.length !== 0) {
+        locations.push({ row: rowValue, colSpots });
+      }
+    });
+
+    return locations;
+  };
+
+  const getSymbolLocations = (symbol) => {
+    const locations = [];
+    Object.entries(board).forEach((rowArray) => {
+      const rowValue = rowArray[0];
+      const rowSpots = rowArray[1];
+      const colSpots = [];
+
+      for (let i = 0; i < rowSpots.length; i += 1) {
+        const spot = rowSpots[i];
+        if (spot === symbol) {
           colSpots.push(i);
         }
       }
@@ -148,28 +169,6 @@ const gameboard = () => {
   const getShipLocations = () => getSymbolLocations("S");
   const getHitLocations = () => getSymbolLocations("X");
   const getMissLocations = () => getSymbolLocations("O");
-
-  const getSymbolLocations = (symbol) => {
-    const locations = [];
-    Object.entries(board).forEach((rowArray) => {
-      const rowValue = rowArray[0];
-      const rowSpots = rowArray[1];
-      const colSpots = [];
-
-      for (let i = 0; i < rowSpots.length; i++) {
-        const spot = rowSpots[i];
-        if (spot === symbol) {
-          colSpots.push(i);
-        }
-      }
-
-      if (colSpots.length !== 0) {
-        locations.push({ row: rowValue, colSpots });
-      }
-    });
-
-    return locations;
-  };
 
   return {
     getBoard,
